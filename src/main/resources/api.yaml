@@ -1,18 +1,230 @@
+# this is an example of the Uber API
+# as a demonstration of an API spec in YAML
 swagger: '2.0'
 info:
+  title: Uber API
+  description: Move your app forward with the Uber API
   version: "1.0.0"
+# the domain of the service
+host: api.uber.com
+# array of all schemes that your API supports
+schemes:
+  - https
+# will be prefixed to all paths
+basePath: /v1
+consumes:
+  - application/json
+produces:
+  - application/json
 paths:
-  /hello:
+  /proyecto/{name}:
+    
     get:
+      parameters:
+        - name: name
+          in: path
+          description: Proyecto que se quiere consultar
+          type: string
       responses:
         200:
+          description:  Respuesta del proyecto que esta consultando
           schema:
-            $ref: "#/definitions/HelloResponse"
+            title: proyect
+            type: '#/definitions/Proyecto'
+    
+    post:
+      parameters:
+        - name: proyecto
+          in: body
+          description: Request Crea un nuevo proyecto
+          type: '#/definitions/Proyecto'
+      responses:
+        200:
+          description: Proyecto creado con exito
+    
+    put:
+      parameters: 
+        - name: proyecto
+          in: body
+          description: Request modificar un proyecto
+          type: '#/definitions/Proyecto'
+      responses:
+        200:
+          description: Proyecto moficiado con exito
+  
+    
+    delete:
+      parameters:
+        - name: proyecto
+          in: body
+          description: Eliminar un proyecto
+          type: '#/definitions/Proyecto'
+      responses:
+        200:
+          description: Proyecto eliminado con exito
+          
+    
+  /proyecto/porcentaje/{name}:
+    get:
+      parameters:
+        - name: name
+          in: path
+          description: Proyecto que se quiere consultar porcentaje
+          type: string
+      responses:
+        200:
+          description:  Respuesta del proyecto porcentaje
+          schema:
+            title: projectPorcentaje
+            type: string
+            
+  /Tarea/{name}:
+    get:
+      parameters:
+        - name: name
+          in: path
+          description: nombre de la tarea que se quiere consultar
+          type: string
+      responses:
+        200:
+          description:  Respuesta de la tarea que se esta consultando
+          schema:
+            title: Tarea
+            type: '#/definitions/Tareas'
+    
+    post:
+      parameters:
+        - name: Tarea
+          in: body
+          description: Request Crea una nueva tarea
+          type: '#/definitions/Tareas'
+      responses:
+        200:
+          description: Tarea creada con exito
+    
+    put:
+      parameters: 
+        - name: Tarea
+          in: body
+          description: Request modificar una tarea
+          type: '#/definitions/Tarea'
+      responses:
+        200:
+          description: Tarea moficiado con exito
+          
+          
+    delete:
+      parameters:
+      
+        - name: Tarea
+          in: body
+          description: elimina la tarea
+          schemas:
+           type: '#/definitions/Tarea'
+
+      responses:
+        200:
+          description: tarea eliminada con exito
+
+  /Tarea/Usuario/{name}:
+  
+    post:
+      parameters:
+        - name: Tarea
+          in: body
+          description: Request Crea una nueva tarea
+          schema:
+          title: tarea
+          type: 
+           $ref: '#/definitions/Tareas'
+        
+        - name: Usuario
+          in: path
+          description: Request Crea una nueva tarea
+          type: string
+      responses:
+        200:
+          description: Tarea asignada a usuario con exito
+          
+  /Tarea/Status:
+    
+    put:
+      parameters:
+        - name: tarea
+          in: body
+          description: nombre de la tarea a cambiar el estado
+          type: string
+
+      responses:
+        200:
+          description: tarea cambiada o no lista con exito
+          
+  /Usuario/{name}:
+    get:
+      parameters:
+      - name: name
+        in: path
+        description: nombre del usuario
+        type: string
+        required: true  
+      responses:
+        200:
+          description:  Respuesta de las tareas
+          schema:
+            title: Tarea
+            type: array
+            items: 
+              $ref: '#/definitions/Tareas'
+  
+
 definitions:
-  HelloResponse:
+  
+  Usuarios:
     type: object
-    required:
-    - hello
     properties:
-      hello:
+      tareas:
+        title: tareas
+        type: array
+        items: 
+          $ref: '#/definitions/Proyecto'
+      proyecto:
+        type: string
+  
+  Tareas:
+    type: object
+    properties:
+      nombreTarea:
+        type: string
+      Usuario :
+        type: string
+      Indicador:
+        type: string
+
+  Proyecto:
+    type: object
+    properties:
+      NombreProyecto:
+        type: string
+      NombreLider:
+        type: string
+      FechaInicio:
+        type: string
+      FechaFinalizacion:
+        type: string
+      TareasAsociadas:
+        title: tareas
+        type: array
+        items:
+          $ref: '#/definitions/Tareas'
+  
+  
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
         type: string
